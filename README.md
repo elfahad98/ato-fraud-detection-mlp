@@ -32,29 +32,57 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## Pipeline complet
+##  Pipeline complet
 
-1. **Prétraitement**
-   - Nettoyage et imputation des valeurs manquantes  
-   - Création de variables temporelles (`hour`, `dayofweek`, `is_weekend`)  
-   - Variables de comportement (`is_new_country`, `time_since_last_login`)  
-   - Encodage OHE (avec `min_frequency=10`)  
-   - Normalisation avec `StandardScaler`
+1. **Chargement & échantillonnage (~300k lignes)**
+   - Lecture par **chunks (200k)** du `rba-dataset.csv`.
+   - **Conservation de toutes les fraudes**.
+   - **Échantillonnage aléatoire de 1%** des non-fraudes.
+   - Concaténation → `df_sample` (≈ 312 693 non-fraudes, 141 fraudes).
 
-2. **Modélisation**
-   - Entraînement d’un **MLPClassifier** optimisé (`alpha=3e-3`, `learning_rate_init=1e-3`)  
-   - Recherche d’hyperparamètres via `RandomizedSearchCV`
-   - Poids d’équilibrage (`class_weight="balanced"`) et oversampling contrôlé  
+2. **Prétraitement & feature engineering**
+   - **RTT** : `has_rtt` (flag de présence), imputation **médiane**, puis **`rtt_zscore`**.
+   - **Manquants** : `Region`, `City`, `Device Type` → `"Unknown"`.
+   - **Pays rares** : garder le **Top-20** ; le reste → `"Other"`.
+   - **Temporel** : `timestamp` ← `Login Timestamp`, `hour`, `dayofweek`, `is_weekend`.
+   - **Par utilisateur** (tri par `User ID`, `timestamp`) :  
+     `prev_country/device/asn/time` → `is_new_country`, `is_new_device`, `is_new_asn`, `time_since_last_login` (sec, `-1` si premier login).
+   - Les variables `prev_*` ne sont **pas** utilisées comme features (servaient juste au calcul).
 
-3. **Évaluation**
-   - **PR-AUC = 0.709**  
-   - **ROC-AUC = 0.97**  
-   - **Recall@1%FPR ≈ 0.89**  
-   - Analyse des seuils optimaux (1% FPR, max-F1, min-cost)
+3. **Jeu d’apprentissage**
+   - **Target** : `Is Account Takeover`.
+   - **Features utilisées** :  
+     - Numériques : `hour`, `dayofweek`, `is_weekend`, `time_since_last_login`, `has_rtt`, `rtt_zscore`, `is_new_country`, `is_new_device`, `is_new_asn`, `Login Successful`.  
+     - Catégorielles : `Country`, `Device Type`, `ASN`.
+   - Split **stratifié 80/20** (train/test, `random_state=42`).
 
-4. **Interprétation**
-   - Analyse des **features importantes** via SHAP  
-   - Identification des pays, ASN et types d’appareils à risque
+4. **Encodage & normalisation**
+   - `ColumnTransformer` :  
+     - **`StandardScaler(with_mean=False)`** sur les numériques ci-dessus.  
+     - **`OneHotEncoder(handle_unknown="ignore", min_frequency=10, sparse_output=False)`** sur `Country`, `Device Type`, `ASN`.
+
+5. **Modélisation (champion)**
+   - **MLPClassifier** : `hidden_layer_sizes=(128,64)`, `activation="relu"`,  
+     `learning_rate="adaptive"`, `learning_rate_init=1e-3`, `batch_size=512`,  
+     `alpha=3e-3`, `max_iter=600`, `early_stopping=True`, `validation_fraction=0.15`, `random_state=42`.
+   - **Pondération** : `compute_sample_weight("balanced", y_train)` et fit avec `sample_weight`.
+
+6. **Calibration du seuil (métier)**
+   - Seuil **appris sur TRAIN** pour viser **~1% FPR** :  
+     `thr_final = threshold_at_fpr_on_train(y_train, scores_train, target=0.01)`  
+     (dans ton run : **`thr_final ≈ 0.019113`**).
+
+7. **Évaluation (TEST)**
+   - **PR-AUC ≈ 0.709**, **ROC-AUC ≈ 0.970**.  
+   - **Recall@~1%FPR ≈ 0.893**, **Precision@~1%FPR ≈ 0.037**.  
+   - Matrice de confusion (seuil 0.0191) : **TP=25, FP=645, FN=3, TN=61 894**.
+
+8. **Interprétabilité**
+   - **SHAP (PermutationExplainer)** sur les données **transformées** → bar chart (importance globale) + beeswarm (impact directionnel).  
+   - Variables saillantes : certains **ASN**, `Login Successful`, **Country**, **Device Type**, et signaux temporels/comportementaux.
+
+9. **Sauvegarde**
+   - Export **`mlp_ato_model.joblib`** contenant **pipeline + seuil + métadonnées** (hash **SHA256** fourni).
 
 ---
 
