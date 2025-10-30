@@ -1,9 +1,9 @@
 # Détection d'Account Takeover (ATO) — Machine Learning avec Scikit-Learn
 
 ##  Objectif du projet
-Détecter les **prises de contrôle de compte (Account Takeover)** à partir de logs de connexion.  
-Les données proviennent du **RBA Dataset** (Kaggle), qui contient **>33 millions** d’enregistrements.  
-Le but est d’obtenir un modèle **robuste et interprétable** qui identifie les comportements anormaux tout en maintenant un **taux de faux positifs ≈ 1%** (seuil métier).
+Ce projet vise à **détecter les tentatives de prise de contrôle de compte (Account TakeOver)** à partir de logs d’authentification utilisateur.  
+Les données proviennent du dataset **RBA Dataset** de Kaggle, comprenant plus de **33 millions de lignes**, simulant des connexions légitimes et malveillantes dans un contexte de cybersécurité.
+L’objectif est de construire un **modèle robuste et interprétable** capable d’identifier les comportements anormaux tout en limitant les faux positifs (FPR ≈ 1%).
 
 ---
 
