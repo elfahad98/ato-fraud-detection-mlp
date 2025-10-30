@@ -1,4 +1,4 @@
-# Détection d'Account Takeover (ATO) — Machine Learning avec Scikit-Learn
+# Détection d'Account Takeover (ATO) — Machine Learning avec scikit-learn (Python)
 
 ##  Objectif du projet
 Ce projet vise à **détecter les tentatives de prise de contrôle de compte (Account TakeOver)** à partir de logs d’authentification utilisateur.  
