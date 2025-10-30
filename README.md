@@ -1,4 +1,4 @@
-# Détection d'Account Takeover (ATO) — Machine Learning avec PySpark & Scikit-Learn
+# Détection d'Account Takeover (ATO) — Machine Learning avec Scikit-Learn
 
 ##  Objectif du projet
 
