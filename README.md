@@ -1,6 +1,6 @@
-# 🔐 Détection d'Account Takeover (ATO) — Machine Learning avec PySpark & Scikit-Learn
+# Détection d'Account Takeover (ATO) — Machine Learning avec PySpark & Scikit-Learn
 
-## 🎯 Objectif du projet
+##  Objectif du projet
 
 Ce projet vise à **détecter les tentatives de prise de contrôle de compte (Account TakeOver)** à partir de logs d’authentification utilisateur.  
 Les données proviennent du dataset **RBA Dataset** de Kaggle, comprenant plus de **33 millions de lignes**, simulant des connexions légitimes et malveillantes dans un contexte de cybersécurité.
@@ -9,7 +9,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## ⚙️ Stack technique
+##  Stack technique
 
 | Domaine | Outils utilisés |
 |----------|----------------|
@@ -22,7 +22,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## 🧩 Pipeline complet
+## Pipeline complet
 
 1. **Prétraitement**
    - Nettoyage et imputation des valeurs manquantes  
@@ -48,7 +48,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## 📊 Résultats principaux
+##  Résultats principaux
 
 | Indicateur | Train | Test |
 |-------------|-------|------|
@@ -62,7 +62,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## 📈 Visualisations
+## Visualisations
 
 | Graphique | Description |
 |------------|-------------|
@@ -74,7 +74,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## 🧠 Interprétation SHAP
+##  Interprétation SHAP
 
 Les attributs les plus influents sur la détection de fraude :
 - **ASN (réseau d’origine)** : certains ASN associés à des anomalies.
@@ -84,7 +84,7 @@ Les attributs les plus influents sur la détection de fraude :
 
 ---
 
-## 💾 Sauvegarde et déploiement
+## Sauvegarde et déploiement
 
 Le modèle final est sauvegardé au format `.joblib` :
 
