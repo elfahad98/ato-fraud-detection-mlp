@@ -59,9 +59,13 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
    - Encodage des catégorielles et harmonisation des échelles (pipeline prêt pour la prod).
 
 5) **Modélisation & déséquilibre**
-   - **Split stratifié 80/20** (train/test) et **pondération des classes**.
-   - **Benchmark** de plusieurs approches (baseline linéaire, arbre/boosting, réseau peu profond).
-   - Pilotage par **PR-AUC** et **Recall sous contrainte de 1% FPR** (métriques adaptées au déséquilibre).
+   - **Split stratifié 80/20** (train/test) et **pondération des classes** pour compenser le fort déséquilibre.
+   - **Benchmark de trois modèles :**
+     - **Régression logistique** → modèle **baseline** (linéaire, simple et interprétable).  
+     - **XGBoost** → modèle **arborescent**, robuste aux interactions complexes.  
+     - **MLPClassifier** → réseau de neurones **peu profond** (128–64 neurones) choisi comme **modèle final**.
+   - Sélection du meilleur compromis sur **PR-AUC**, **ROC-AUC** et **Recall@1%FPR**, adaptés au contexte de détection rare.
+
 
 6) **Optimisation, seuil & sélection finale**
    - Ajustements ciblés (régularisation, taille du réseau, gestion des catégories rares) pour **réduire l’overfit**.
