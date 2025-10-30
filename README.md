@@ -20,11 +20,16 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 ---
 
 ##  Jeu de données & échantillonnage
-- Source : **RBA Dataset** (Kaggle), ~**33M** lignes (authentifications légitimes & malveillantes).
-- Pour l’entraînement/évaluation dans ce repo : **sous-échantillon ≈ 300 000** lignes, obtenu en **gardant toutes les fraudes** et un **échantillon des non-fraudes** (≈1%).  
-  → Permet d’itérer rapidement en local tout en préservant la structure du déséquilibre.  
-- Les **données brutes** ne sont **pas** versionnées dans le dépôt (taille/sensibilité).  
-- Le modèle final est calibré à **~1% FPR** (seuil appris sur train), et évalué sur un **jeu de test tenu à part**.
+- **Source :** RBA Dataset (Kaggle) — plus de **33 millions de connexions simulées** entre utilisateurs légitimes et attaques ATO.
+- **Objectif :** identifier les connexions frauduleuses à partir des logs d’authentification.
+- **Sous-échantillon utilisé (≈ 300 000 lignes)** :
+  - Conservation **de toutes les fraudes** (141 échantillons).
+  - **Échantillonnage aléatoire de 1%** des connexions normales (~312 000).
+  - Chargement progressif par **chunks de 200 000 lignes** pour éviter la surcharge mémoire.
+- Cet échantillon est utilisé **pour l’ensemble des étapes** :  
+  **EDA**, **prétraitement**, **feature engineering**, **modélisation** et **interprétabilité**.
+- Le modèle final est calibré pour **1% de faux positifs (FPR)** et évalué sur un **jeu de test distinct**.
+
 ---
 
 ## Pipeline complet
