@@ -1,25 +1,30 @@
 # Détection d'Account Takeover (ATO) — Machine Learning avec Scikit-Learn
 
 ##  Objectif du projet
-
-Ce projet vise à **détecter les tentatives de prise de contrôle de compte (Account TakeOver)** à partir de logs d’authentification utilisateur.  
-Les données proviennent du dataset **RBA Dataset** de Kaggle, comprenant plus de **33 millions de lignes**, simulant des connexions légitimes et malveillantes dans un contexte de cybersécurité.
-
-L’objectif est de construire un **modèle robuste et interprétable** capable d’identifier les comportements anormaux tout en limitant les faux positifs (FPR ≈ 1%).
+Détecter les **prises de contrôle de compte (Account Takeover)** à partir de logs de connexion.  
+Les données proviennent du **RBA Dataset** (Kaggle), qui contient **>33 millions** d’enregistrements.  
+Le but est d’obtenir un modèle **robuste et interprétable** qui identifie les comportements anormaux tout en maintenant un **taux de faux positifs ≈ 1%** (seuil métier).
 
 ---
 
 ##  Stack technique
+| Domaine                 | Outils |
+|-------------------------|--------|
+| Préparation & analyse   | **Pandas**, **NumPy** |
+| Modélisation            | **scikit-learn** (MLPClassifier, Logistic Regression, XGBoost) |
+| Évaluation              | **PR-AUC**, **ROC-AUC**, **Recall@1%FPR**, matrice de confusion |
+| Interprétabilité        | **SHAP** |
+| Visualisation           | **Matplotlib** |
+| Environnement           | **Jupyter Notebook**, **Python 3.11** |
 
-| Domaine | Outils utilisés |
-|----------|----------------|
-| Préparation & analyse | PySpark, Pandas |
-| Modélisation | Scikit-Learn (MLPClassifier, Logistic Regression, XGBoost) |
-| Évaluation | ROC-AUC, PR-AUC, Recall@1%FPR |
-| Interprétabilité | SHAP values |
-| Visualisation | Matplotlib, Seaborn |
-| Environnement | Jupyter Notebook, Python 3.11 |
+---
 
+##  Jeu de données & échantillonnage
+- Source : **RBA Dataset** (Kaggle), ~**33M** lignes (authentifications légitimes & malveillantes).
+- Pour l’entraînement/évaluation dans ce repo : **sous-échantillon ≈ 300 000** lignes, obtenu en **gardant toutes les fraudes** et un **échantillon des non-fraudes** (≈1%).  
+  → Permet d’itérer rapidement en local tout en préservant la structure du déséquilibre.  
+- Les **données brutes** ne sont **pas** versionnées dans le dépôt (taille/sensibilité).  
+- Le modèle final est calibré à **~1% FPR** (seuil appris sur train), et évalué sur un **jeu de test tenu à part**.
 ---
 
 ## Pipeline complet
