@@ -32,57 +32,42 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-##  Pipeline complet
+##  Méthodologie (6 étapes)
 
-1. **Chargement & échantillonnage (~300k lignes)**
-   - Lecture par **chunks (200k)** du `rba-dataset.csv`.
-   - **Conservation de toutes les fraudes**.
-   - **Échantillonnage aléatoire de 1%** des non-fraudes.
-   - Concaténation → `df_sample` (≈ 312 693 non-fraudes, 141 fraudes).
+1) **Chargement & échantillonnage (~300k)**
+   - Lecture progressive du **RBA Dataset** (33M+) par blocs.
+   - **Conserver toutes les fraudes** et **échantillonner ~1%** des connexions normales.
+   - Constituer un jeu de travail équilibré pour l’EDA et l’entraînement.
 
-2. **Prétraitement & feature engineering**
-   - **RTT** : `has_rtt` (flag de présence), imputation **médiane**, puis **`rtt_zscore`**.
-   - **Manquants** : `Region`, `City`, `Device Type` → `"Unknown"`.
-   - **Pays rares** : garder le **Top-20** ; le reste → `"Other"`.
-   - **Temporel** : `timestamp` ← `Login Timestamp`, `hour`, `dayofweek`, `is_weekend`.
-   - **Par utilisateur** (tri par `User ID`, `timestamp`) :  
-     `prev_country/device/asn/time` → `is_new_country`, `is_new_device`, `is_new_asn`, `time_since_last_login` (sec, `-1` si premier login).
-   - Les variables `prev_*` ne sont **pas** utilisées comme features (servaient juste au calcul).
+2) **Nettoyage & préparation**
+   - Contrôle du typage, détection d’incohérences et doublons.
+   - Gestion des valeurs manquantes (imputation sobre + indicateurs de présence).
+   - Regroupement des **catégories rares** (ex. pays/devices) pour limiter la variabilité.
+   - Mise à l’échelle cohérente des variables numériques.
 
-3. **Jeu d’apprentissage**
-   - **Target** : `Is Account Takeover`.
-   - **Features utilisées** :  
-     - Numériques : `hour`, `dayofweek`, `is_weekend`, `time_since_last_login`, `has_rtt`, `rtt_zscore`, `is_new_country`, `is_new_device`, `is_new_asn`, `Login Successful`.  
-     - Catégorielles : `Country`, `Device Type`, `ASN`.
-   - Split **stratifié 80/20** (train/test, `random_state=42`).
+3) **EDA orientée risque**
+   - Mesure de la **prévalence ATO** (globale & par segments : device, pays, créneaux horaires).
+   - Analyse des **comportements inhabituels** (ex. changement soudain de pays/device, délais entre connexions).
+   - Identification des **facteurs et patterns** corrélés au risque (réseau/ASN, RTT, succès/échec login).
+   - Formulation d’hypothèses qui guident le feature engineering.
 
-4. **Encodage & normalisation**
-   - `ColumnTransformer` :  
-     - **`StandardScaler(with_mean=False)`** sur les numériques ci-dessus.  
-     - **`OneHotEncoder(handle_unknown="ignore", min_frequency=10, sparse_output=False)`** sur `Country`, `Device Type`, `ASN`.
+4) **Feature Engineering**
+   - **Temporel** : rythme d’activité, jour/heure, week-end.
+   - **Comportement utilisateur** : transitions (nouveau pays/device/ASN), **délai depuis la dernière connexion**.
+   - **Réseau** : signaux de latence/RTT et fournisseur (ASN).
+   - **Géographie & device** : regroupements lisibles, réduction des modalités rares.
+   - Encodage des catégorielles et harmonisation des échelles (pipeline prêt pour la prod).
 
-5. **Modélisation (champion)**
-   - **MLPClassifier** : `hidden_layer_sizes=(128,64)`, `activation="relu"`,  
-     `learning_rate="adaptive"`, `learning_rate_init=1e-3`, `batch_size=512`,  
-     `alpha=3e-3`, `max_iter=600`, `early_stopping=True`, `validation_fraction=0.15`, `random_state=42`.
-   - **Pondération** : `compute_sample_weight("balanced", y_train)` et fit avec `sample_weight`.
+5) **Modélisation & déséquilibre**
+   - **Split stratifié 80/20** (train/test) et **pondération des classes**.
+   - **Benchmark** de plusieurs approches (baseline linéaire, arbre/boosting, réseau peu profond).
+   - Pilotage par **PR-AUC** et **Recall sous contrainte de 1% FPR** (métriques adaptées au déséquilibre).
 
-6. **Calibration du seuil (métier)**
-   - Seuil **appris sur TRAIN** pour viser **~1% FPR** :  
-     `thr_final = threshold_at_fpr_on_train(y_train, scores_train, target=0.01)`  
-     (dans ton run : **`thr_final ≈ 0.019113`**).
-
-7. **Évaluation (TEST)**
-   - **PR-AUC ≈ 0.709**, **ROC-AUC ≈ 0.970**.  
-   - **Recall@~1%FPR ≈ 0.893**, **Precision@~1%FPR ≈ 0.037**.  
-   - Matrice de confusion (seuil 0.0191) : **TP=25, FP=645, FN=3, TN=61 894**.
-
-8. **Interprétabilité**
-   - **SHAP (PermutationExplainer)** sur les données **transformées** → bar chart (importance globale) + beeswarm (impact directionnel).  
-   - Variables saillantes : certains **ASN**, `Login Successful`, **Country**, **Device Type**, et signaux temporels/comportementaux.
-
-9. **Sauvegarde**
-   - Export **`mlp_ato_model.joblib`** contenant **pipeline + seuil + métadonnées** (hash **SHA256** fourni).
+6) **Optimisation, seuil & sélection finale**
+   - Ajustements ciblés (régularisation, taille du réseau, gestion des catégories rares) pour **réduire l’overfit**.
+   - **Calibration du seuil métier** sur **TRAIN** pour viser **~1% de faux positifs**, puis validation sur **TEST**.
+   - **Interprétabilité** : importance globale et impacts locaux (SHAP) pour expliciter les facteurs de risque.
+   - **Export** des artefacts (pipeline + seuil + méta) pour un usage reproductible.
 
 ---
 
