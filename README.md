@@ -35,7 +35,6 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 ##  Méthodologie (6 étapes)
 
 1) **Chargement & échantillonnage (~300k)**
-   - Lecture progressive du **RBA Dataset** (33M+) par blocs.
    - **Conserver toutes les fraudes** et **échantillonner ~1%** des connexions normales.
    - Constituer un jeu de travail équilibré pour l’EDA et l’entraînement.
 
