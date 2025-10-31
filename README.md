@@ -14,7 +14,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 | Modélisation            | **scikit-learn** (MLPClassifier, Logistic Regression, XGBoost) |
 | Évaluation              | **PR-AUC**, **ROC-AUC**, **Recall@1%FPR**, matrice de confusion |
 | Interprétabilité        | **SHAP** |
-| Visualisation           | **Matplotlib** |
+| Visualisation           | **Matplotlib**,**Seaborn** |
 | Environnement           | **Jupyter Notebook**, **Python 3.11** |
 
 ---
