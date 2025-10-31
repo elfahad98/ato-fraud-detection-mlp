@@ -88,15 +88,15 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 ---
 
-## Visualisations
+## Visualisations — Analyse 
 
-| Graphique | Description |
+| Graphique | Analyse |
 |---|---|
-| ![Courbe PR](screenshots/PR.png) | Pourquoi ce graphe d’abord : en données **très déséquilibrées**, la PR montre comment la **précision chute** quand on pousse le **rappel**. Le point choisi illustre un **compromis opérationnel** : assez de fraudes captées tout en gardant une charge d’alertes gérable. |
-| ![Courbe ROC](screenshots/ROC.png) | Lecture “séparabilité” du modèle : la courbe **monte tôt** → on peut **rester à faible FPR** tout en conservant un bon TPR. Utile pour **déplacer le seuil** selon la tolérance au risque du SOC (ex. 0.5% vs 2%). |
-| ![Matrice de confusion](screenshots/mat_confus.png) | Ce que donnent **les erreurs** au **seuil choisi** : quelques fraudes passent (FN), mais l’essentiel de la charge vient des **faux positifs**. À traiter via **whitelists**, agrégation par compte/IP et priorisation des alertes à fort score. |
-| ![SHAP summary](screenshots/shap.png) | Le **pourquoi** des scores : certains **ASN/pays** tirent le risque vers le haut, un **login réussi** le réduit, et **type d’appareil** influe. Sert à créer des **règles d’enrichissement**, guider l’**enquête analyste** et **surveiller le drift** (si la distribution des ASN/pays change). |
-| ![Output global](screenshots/output.png) | Comment on **consomme en prod** : score brut, **décision au seuil**, et **explications** pour l’analyste. À journaliser dans le **SIEM** avec l’ID session + top features pour l’**audit** et la **rejouabilité**. |
+| ![Precision–Recall](screenshots/PR.png) | **AP ≈ 0.709** (>> baseline ≈ 0.00045).<br>À **recall ≈ 0.89**, **precision ≈ 3.7%** ⇒ bon ranking malgré l’ultra-déséquilibre. |
+| ![ROC](screenshots/ROC.png) | **AUC ≈ 0.97**. Au point métier **@~1% FPR**, **TPR ≈ 0.893**.<br>(En rareté, PR-AUC reste la métrique prioritaire.) |
+| ![Matrice de confusion](screenshots/mat_confus.png) | Seuil **θ ≈ 0.0191** (1% FPR) → **TP=25, FP=645, FN=3, TN=61 894**.<br>Capte **25/28** fraudes, ~**645** alertes à revoir. |
+| ![SHAP summary](screenshots/shap.png) | Principaux moteurs : **ASN** (29695, 29492, 393398), **Country** (US/NO/PL/DE), **Device Type** (mobile/desktop),<br>**Login Successful**. Indiquent des **changements d’environnement** à risque. |
+| ![Sortie modèle](screenshots/output.png) | Règle : `predict_proba ≥ 0.0191` ⇒ alerte.<br>Ajuster le seuil selon le **compromis précision ↔ rappel**. |
 
 
 ---
