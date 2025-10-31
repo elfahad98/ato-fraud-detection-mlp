@@ -96,7 +96,6 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 | ![Courbe ROC](screenshots/ROC.png) | **AUC ≈ 0.97** (excellente séparation globale). Au point métier **@ ~1% FPR**, on lit **TPR ≈ 0.893**. |
 | ![Matrice de confusion](screenshots/mat_confus.png) | Seuil calibré pour **~1% FPR** (θ ≈ 0.0191).<br>**TP=25**, **FP=645**, **FN=3**, **TN=61 894** ⇒<br> **Recall = 0.893**, **Precision = 0.037**, **FPR ≈ 0.0103**.<br>Lecture métier : on **capte presque toutes les fraudes** (3 manquées) au prix d’**~645 alertes** à vérifier. |
 | ![SHAP summary](screenshots/shap.png) | Facteurs qui **poussent le score** : **ASN** (29695, 29492, 393398), **Country** (US/NO/PL/DE),<br> **Device Type** (mobile/desktop), **Login Successful**.<br>→ Risque lié aux **changements d’environnement** (réseau/appareil) et à certains **fournisseurs**. |
-| ![Sortie modèle](screenshots/output.png) | **Seuil** : θ = **0.0191**.<br>À ce seuil : **Recall ≈ 0.893**, **Precision ≈ 0.037**, **F1 ≈ 0.072**.<br> **Règle** : `predict_proba ≥ θ` ⇒ alerte (à coupler avec MFA/revue). |
 
 ---
 
