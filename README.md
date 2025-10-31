@@ -92,10 +92,10 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 | Graphique | Analyse |
 |---|---|
-| ![Precision–Recall](screenshots/PR.png) | **AP ≈ 0.709** (>> baseline ≈ 0.00045). À **recall ≈ 0.89**, **precision ≈ 3.7%** ⇒ bon ranking malgré l’ultra-déséquilibre. |
-| ![ROC](screenshots/ROC.png) | **AUC ≈ 0.97**. Au point métier **@~1% FPR**, **TPR ≈ 0.893**. (En rareté, PR-AUC reste la métrique prioritaire.) |
-| ![Matrice de confusion](screenshots/mat_confus.png) | Seuil **θ ≈ 0.0191** (1% FPR) → **TP=25, FP=645, FN=3, TN=61 894**. Capte **25/28** fraudes, ~**645** alertes à revoir. |
-| ![SHAP summary](screenshots/shap.png) | Principaux moteurs : **ASN** (29695, 29492, 393398), **Country** (US/NO/PL/DE), **Device Type** (mobile/desktop), **Login Successful**. Indiquent des **changements d’environnement** à risque. |
+| ![Precision–Recall](screenshots/PR.png) | **AP ≈ 0.709** (>> baseline ≈ 0.00045).\\ À **recall ≈ 0.89**, **precision ≈ 3.7%** ⇒ bon ranking malgré l’ultra-déséquilibre. |
+| ![ROC](screenshots/ROC.png) | **AUC ≈ 0.97**. Au point métier **@~1% FPR**, **TPR ≈ 0.893**.\\ (En rareté, PR-AUC reste la métrique prioritaire.) |
+| ![Matrice de confusion](screenshots/mat_confus.png) | Seuil **θ ≈ 0.0191** (1% FPR) → **TP=25, FP=645, FN=3, TN=61 894**. \\Capte **25/28** fraudes, ~**645** alertes à revoir. |
+| ![SHAP summary](screenshots/shap.png) | Principaux moteurs : **ASN** (29695, 29492, 393398), **Country** (US/NO/PL/DE), **Device Type** (mobile/desktop),\\ **Login Successful**. Indiquent des **changements d’environnement** à risque. |
 | ![Sortie modèle](screenshots/output.png) | Règle : `predict_proba ≥ 0.0191` ⇒ alerte. Ajuster le seuil selon le **compromis précision ↔ rappel**. |
 
 ---
