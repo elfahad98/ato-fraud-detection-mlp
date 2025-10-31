@@ -92,7 +92,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 | Graphique | Analyse |
 |---|---|
-| ![Courbe Precision–Recall](screenshots/PR.png) | **AP ≈ 0.709**, très au-dessus de la baseline ≈ **0.00045** (prévalence).<br>Le modèle classe **très bien** les attaques malgré l’ultra-déséquilibre. À **recall ≈ 0.89**, la **precision ≈ 3.7%** (coût d’alerte acceptable pour du **screening large**). |
+| ![Courbe Precision–Recall](screenshots/PR.png) | **AP ≈ 0.709**, très au-dessus de la baseline <br>≈ **0.00045** (prévalence).Le modèle classe **très bien** les attaques malgré l’ultra-déséquilibre. À **recall ≈ 0.89**, la **precision ≈ 3.7%** (coût d’alerte acceptable pour du **screening large**). |
 | ![Courbe ROC](screenshots/ROC.png) | **AUC ≈ 0.97** (excellente séparation globale).<br>Au point métier **@ ~1% FPR**, on lit **TPR ≈ 0.893**.  En données rares, privilégier la **PR-AUC** pour la sélection de modèle. |
 | ![Matrice de confusion](screenshots/mat_confus.png) | Seuil calibré pour **~1% FPR** (θ ≈ 0.0191).<br>**TP=25**, **FP=645**, **FN=3**, **TN=61 894** ⇒ **Recall = 0.893**, **Precision = 0.037**, **FPR ≈ 0.0103**.<br>Lecture métier : on **capte presque toutes les fraudes** (3 manquées) au prix d’**~645 alertes** à vérifier. |
 | ![SHAP summary](screenshots/shap.png) | Facteurs qui **poussent le score** : **ASN** (29695, 29492, 393398), **Country** (US/NO/PL/DE), **Device Type** (mobile/desktop), **Login Successful**.<br>→ Risque lié aux **changements d’environnement** (réseau/appareil) et à certains **fournisseurs**. |
