@@ -92,11 +92,11 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
 
 | Graphique | Description |
 |---|---|
-| ![Courbe PR](screenshots/PR.png) | Precision–Recall (**TEST**) — **AP ≈ 0.709**. Point d’opération au **seuil 0.0191** (≈ **1% FPR**) : **Recall ≈ 0.893**, **Precision ≈ 0.037**. Ligne pointillée = **prévalence ≈ 0.0004**. |
-| ![Courbe ROC](screenshots/ROC.png) | ROC (**TEST**) — **AUC ≈ 0.970**. Point marqué : **FPR ≈ 1% → TPR ≈ 0.893** au **seuil 0.0191**. |
-| ![Matrice de confusion](screenshots/mat_confus.png) | Matrice (**TEST, seuil 0.0191**) — **TN = 61 894**, **FP = 645**, **FN = 3**, **TP = 25** (**FPR ≈ 1.03%**). |
-| ![SHAP summary](screenshots/shap.png) | SHAP (**modèle final**) — Variables influentes : **ASN 29695/29492/393398**, **Login Successful**, **pays** (US, NO, PL, DE), **type d’appareil** (mobile/desktop). |
-| ![Output global](screenshots/output.png) | Exemple d’inférence — probabilité, **seuil 0.0191** appliqué, et métriques @ **~1% FPR**. |
+| ![Courbe Precision–Recall](screenshots/PR.png) | **Métrique clé en données déséquilibrées** : courbe PR (**AP ≈ 0.709**). |
+| ![Courbe ROC](screenshots/ROC.png) | Courbe ROC (**AUC ≈ 0.97**) + point @ **1% FPR** (TPR ≈ 0.893). |
+| ![Matrice de confusion](screenshots/mat_confus.png) | Matrice de confusion (TEST) au seuil fixé pour **~1% FPR** : vue concrète TP/FP/FN/TN. |
+| ![SHAP summary](screenshots/shap.png) | Interprétabilité globale : variables les plus influentes et sens de l’impact. |
+| ![Sortie modèle](screenshots/output.png) | Exemple d’output final : seuil (θ), scores, et métriques calculées. |
 
 
 ---
