@@ -55,7 +55,7 @@ L’objectif est de construire un **modèle robuste et interprétable** capable 
    - **Comportement utilisateur** : transitions (nouveau pays/device/ASN), **délai depuis la dernière connexion**.
    - **Réseau** : signaux de latence/RTT et fournisseur (ASN).
    - **Géographie & device** : regroupements lisibles, réduction des modalités rares.
-   - Encodage des catégorielles et harmonisation des échelles (pipeline prêt pour la prod).
+   - Encodage des catégorielles et harmonisation des échelles .
 
 5) **Modélisation & déséquilibre**
    - **Split stratifié 80/20** (train/test) et **pondération des classes** pour compenser le fort déséquilibre.
