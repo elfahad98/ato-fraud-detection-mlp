@@ -109,10 +109,13 @@ Les attributs les plus influents sur la détection de fraude :
 
 ---
 
-## Sauvegarde et déploiement
+## 👤 Auteur
 
-Le modèle final est sauvegardé au format `.joblib` :
+Projet réalisé par **COMBO El-Fahad** – Université de Caen (2025).  
+Contact : `el-fahad.combo@etu.unicaen.fr`
 
-```python
-import joblib
-model = joblib.load("mlp_ato_model.joblib")
+---
+
+## 📄 Licence
+
+Ce projet est sous licence **MIT**. Voir le fichier `LICENSE`.
